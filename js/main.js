@@ -81,6 +81,40 @@ const setUsers = {
   },
 };
 
+const setPosts = {
+  allPosts: [
+    {
+      title: 'Заголовок поста',
+      text:'Далеко-далеко за словесными горами в стране гласных, и согласных живут рыбные тексты. Дороге, снова парадигматическая возвращайся языком, дорогу строчка что сих коварных курсивных семантика, которое живет букв ручеек буквоград имеет свой буквенных над пустился. Своего рот ведущими семь залетают буквенных, дорогу своих пор рыбными взобравшись журчит. Свой однажды всеми пор выйти единственное языком большого мир, дал то алфавит предупредила щеке журчит продолжил сих путь заголовок своих использовало первую рыбного текстов.',
+      tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
+      author: "admin@mail.ru",
+      date: '12.11.2020, 20:00:00',
+      like: 15,
+      comments: 20
+    },
+    {
+      title: 'Заголовок поста',
+      text:'Далеко-далеко за словесными горами в стране гласных, и согласных живут рыбные тексты. Дороге, снова парадигматическая возвращайся языком, дорогу строчка что сих коварных курсивных семантика, которое живет букв ручеек буквоград имеет свой буквенных над пустился. Своего рот ведущими семь залетают буквенных, дорогу своих пор рыбными взобравшись журчит. Свой однажды всеми пор выйти единственное языком большого мир, дал то алфавит предупредила щеке журчит продолжил сих путь заголовок своих использовало первую рыбного текстов.',
+      tags: ['свежее', 'новое', 'мое', 'случайность'],
+      author: "user@mail.ru",
+      date: '11.11.2020, 15:30:00',
+      like: 40,
+      comments: 10
+    },
+    {
+      title: 'Заголовок поста3',
+      text:'Далеко-далеко за словесными горами в стране гласных, и согласных живут рыбные тексты. Дороге, снова парадигматическая возвращайся языком, дорогу строчка что сих коварных курсивных семантика, которое живет букв ручеек буквоград имеет свой буквенных над пустился. Своего рот ведущими семь залетают буквенных, дорогу своих пор рыбными взобравшись журчит. Свой однажды всеми пор выйти единственное языком большого мир, дал то алфавит предупредила щеке журчит продолжил сих путь заголовок своих использовало первую рыбного текстов.',
+      tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
+      author: "admin@mail.ru",
+      date: '12.11.2020, 20:00:00',
+      like: 15,
+      comments: 20
+    },
+  ]
+
+  
+};
+
 const toggleAuthDom = () => {
   const user = setUsers.user;
   console.log("user:", user);
@@ -97,8 +131,55 @@ const toggleAuthDom = () => {
 };
 
 const showAllPosts = () => {
-  postsWrapper.innerHTML = 'ТУТ МОГЛА БЫТЬ ВАША РЕКЛАМА'
-}
+  let postsHTML = '';
+  setPosts.allPosts.forEach(({ title, text, tags, author, date, like, comments }) => {
+    postsHTML += `
+    <section class="post">
+    <div class="post-body">
+        <h2 class="post-title">${title}</h2>
+        <p class="post-text">${text}</p>
+        <div class="tags">
+            <a href="#" class="tag">${tags}</a>
+        </div>
+    </div>
+    <div class="post-footer">
+        <div class="post-buttons">
+            <button class="post-button likes">
+                <svg width="19" height="20" class="icon icon-like">
+                    <use xlink:href="img/icons.svg#like"></use>
+                </svg>
+                <span class="likes-counter">${like}</span>
+            </button>
+            <button class="post-button comments">
+                <svg width="21" height="21" class="icon icon-comment">
+                    <use xlink:href="img/icons.svg#comment"></use>
+                </svg>
+                <span class="comments-counter">${comments}</span>
+            </button>
+            <button class="post-button save">
+                <svg width="19" height="19" class="icon icon-save">
+                    <use xlink:href="img/icons.svg#save"></use>
+                </svg>
+            </button>
+            <button class="post-button share">
+                <svg width="17" height="19" class="icon icon-share">
+                    <use xlink:href="img/icons.svg#share"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="post-author">
+            <div class="author-about">
+                <a href="#" class="author-username">${author}</a>
+                <span class="post-time">${date}</span>
+            </div>
+            <a href="#" class="author-link"><img src="img/avatar.jpg" alt="avatar" class="author-avatar"></a>
+        </div>
+    </div>
+</section>
+    `;
+  })
+  postsWrapper.innerHTML = postsHTML
+};
 
 const init = () => {
 
