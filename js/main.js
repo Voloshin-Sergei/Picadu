@@ -1,11 +1,6 @@
 let menuToggle = document.querySelector("#menu-toggle");
 let menu = document.querySelector(".sidebar");
 
-menuToggle.addEventListener("click", function (event) {
-  event.preventDefault();
-  menu.classList.toggle("visible");
-});
-
 const regExpValidEmail = /^\w+@\w+\.\w{2,}$/;
 const loginElem = document.querySelector(".login");
 const loginForm = document.querySelector(".login-form");
@@ -20,6 +15,7 @@ const editContainer =document.querySelector('.edit-container');
 const editUserName = document.querySelector('.edit-username');
 const editPhotoURL = document.querySelector('.edit-photo');
 const userAvatarElem = document.querySelector('.user-avatar');
+const postsWrapper = document.querySelector('.posts');
 
 const listUsers = [
   {
@@ -100,33 +96,53 @@ const toggleAuthDom = () => {
   }
 };
 
-loginForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  setUsers.logIn(emailInput.value, passwordInput.value, toggleAuthDom);
-  loginForm.reset();
-});
+const showAllPosts = () => {
+  postsWrapper.innerHTML = 'ТУТ МОГЛА БЫТЬ ВАША РЕКЛАМА'
+}
 
-loginSignup.addEventListener("click", (event) => {
-  event.preventDefault();
-  setUsers.signUp(emailInput.value, passwordInput.value, toggleAuthDom);
-  loginForm.reset();
-});
+const init = () => {
 
-exitElem.addEventListener('click', event => {
-  event.preventDefault();
-  setUsers.logOut(toggleAuthDom);
-});
+  loginForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    setUsers.logIn(emailInput.value, passwordInput.value, toggleAuthDom);
+    loginForm.reset();
+  });
+  
+  loginSignup.addEventListener("click", (event) => {
+    event.preventDefault();
+    setUsers.signUp(emailInput.value, passwordInput.value, toggleAuthDom);
+    loginForm.reset();
+  });
+  
+  exitElem.addEventListener('click', event => {
+    event.preventDefault();
+    setUsers.logOut(toggleAuthDom);
+  });
+  
+  editElem.addEventListener('click', event => {
+    event.preventDefault();
+    editContainer.classList.toggle('visible');
+    editUserName.value = setUsers.user.displayName;
+  });
+  
+  editContainer.addEventListener('submit', event => {
+    event.preventDefault();
+    setUsers.editUser(editUserName.value, editPhotoURL.value, toggleAuthDom);
+    editContainer.classList.remove('visible');
+  });
 
-editElem.addEventListener('click', event => {
-  event.preventDefault();
-  editContainer.classList.toggle('visible');
-  editUserName.value = setUsers.user.displayName;
-});
+  menuToggle.addEventListener("click", function (event) {
+    event.preventDefault();
+    menu.classList.toggle("visible");
+  });
 
-editContainer.addEventListener('submit', event => {
-  event.preventDefault();
-  setUsers.editUser(editUserName.value, editPhotoURL.value, toggleAuthDom);
-  editContainer.classList.remove('visible');
-});
+  showAllPosts();
+  toggleAuthDom();
+}
 
-toggleAuthDom();
+document.addEventListener('DOMContentLoaded', () => {
+  init();
+})
+
+
+
