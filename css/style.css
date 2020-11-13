@@ -114,7 +114,12 @@ body {
 }
 
 .posts {
+    display: none;
     width: 67%;
+}
+
+.posts.visible {
+    display: block;
 }
 
 .post {
@@ -460,6 +465,10 @@ body {
     margin-top: 20px;
 }
 
+.button-new-post.visible {
+    display: flex;
+}
+
 .icon-fire {
     fill: #ffffff;
     width: 11px;
@@ -533,19 +542,25 @@ body {
 }
 
 .add-post {
-    display: flex;
+    width: 67%;
+    display: none;
     flex-direction: column;
+}
+
+.add-post.visible {
+    display: flex;
 }
 
 .add-post .button-outline {
     margin-right: 1%;
 }
 
-.add-title, .add-text {
+.add-title, .add-text, .add-tags {
     background: #FFFFFF;
     border: 1px solid #E8E8E8;
     padding: 23px 30px;
     margin-bottom: 16px;
+    resize: none;
 }
 
 .add-text {

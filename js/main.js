@@ -16,6 +16,8 @@ const editUserName = document.querySelector('.edit-username');
 const editPhotoURL = document.querySelector('.edit-photo');
 const userAvatarElem = document.querySelector('.user-avatar');
 const postsWrapper = document.querySelector('.posts');
+const buttonNewPost = document.querySelector('.button-new-post');
+const addPostElem = document.querySelector('.add-post');
 
 const listUsers = [
   {
@@ -110,8 +112,26 @@ const setPosts = {
       like: 15,
       comments: 20
     },
-  ]
+  ],
+  addPost(title, text, tags, handler) {
 
+    this.allPosts.unshift({
+      title,
+      text,
+      tags: tags.split(',').map(item => item.trim()),
+      author: {
+        displayName: setUsers.user.displayName,
+        photo: setUsers.user.photo,
+      },
+      date: new Date().toLocaleString(),
+      like: 0,
+      comments: 0,
+    })
+
+    if (handler) { // TODO add to all fuction with handler
+      handler(); 
+    }
+  }
   
 };
 
@@ -124,13 +144,23 @@ const toggleAuthDom = () => {
     userElem.style.display = "";
     userNameElem.textContent = user.displayName;
     userAvatarElem.src = user.photo ? user.photo : userAvatarElem.src;
+    buttonNewPost.classList.add('visible');
   } else {
     loginElem.style.display = "";
     userElem.style.display = "none";
+    buttonNewPost.classList.remove('visible');
+    addPostElem.classList.remove('visible');
+    postsWrapper.classList.add('visible');
   }
 };
 
+const showAddPost = () => {
+  addPostElem.classList.add('visible');
+  postsWrapper.classList.remove('visible');
+};
+
 const showAllPosts = () => {
+
   let postsHTML = '';
   setPosts.allPosts.forEach(({ title, text, tags, author, date, like, comments }) => {
     postsHTML += `
@@ -138,8 +168,7 @@ const showAllPosts = () => {
     <div class="post-body">
         <h2 class="post-title">${title}</h2>
         <p class="post-text">${text}</p>
-        <div class="tags">${tags.map(tag => `<a href="#" class="tag">#${tag}</a>`)}
-        </div>
+        <div class="tags">${tags.map(tag => `<a href="#" class="tag">#${tag}</a>`)}</div>
     </div>
     <div class="post-footer">
         <div class="post-buttons">
@@ -177,7 +206,11 @@ const showAllPosts = () => {
 </section>
     `;
   })
-  postsWrapper.innerHTML = postsHTML
+  postsWrapper.innerHTML = postsHTML;
+
+  addPostElem.classList.remove('visible');
+  postsWrapper.classList.add('visible');
+
 };
 
 const init = () => {
@@ -214,6 +247,29 @@ const init = () => {
   menuToggle.addEventListener("click", function (event) {
     event.preventDefault();
     menu.classList.toggle("visible");
+  });
+
+  buttonNewPost.addEventListener('click', event => {
+    event.preventDefault();
+    showAddPost();
+  });
+
+  addPostElem.addEventListener('submit', event => {
+    event.preventDefault();
+    const { title, text, tags } = addPostElem.elements;
+    console.log(title, text, tags);
+    if (title.value.length < 6) {
+      alert('Слишком короткий заголовок');
+      return;
+    }
+    if (text.value.length < 50) {
+      alert('Слишком короткий пост');
+      return;
+    }
+
+    setPosts.addPost(title.value, text.value, tags.value, showAllPosts);
+    addPostElem.classList.remove('visible');
+    addPost.reset();
   });
 
   showAllPosts();
