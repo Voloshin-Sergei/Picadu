@@ -1,3 +1,17 @@
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBvwNr9gQhbDLqlMwye9ho5owHyZLYnRU4",
+    authDomain: "picadu-4269c.firebaseapp.com",
+    databaseURL: "https://picadu-4269c.firebaseio.com",
+    projectId: "picadu-4269c",
+    storageBucket: "picadu-4269c.appspot.com",
+    messagingSenderId: "515412986219",
+    appId: "1:515412986219:web:253f91d1a4775e9273242e"
+    };
+  // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    console.log(firebase);
+
 let menuToggle = document.querySelector("#menu-toggle");
 let menu = document.querySelector(".sidebar");
 
@@ -168,7 +182,7 @@ const showAllPosts = () => {
     <div class="post-body">
         <h2 class="post-title">${title}</h2>
         <p class="post-text">${text}</p>
-        <div class="tags">${tags.map(tag => `<a href="#" class="tag">#${tag}</a>`)}</div>
+        <div class="tags">${tags.map(tag => `<a href="#${tag}" class="tag">#${tag}</a>`)}</div>
     </div>
     <div class="post-footer">
         <div class="post-buttons">
