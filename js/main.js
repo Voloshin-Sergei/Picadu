@@ -87,7 +87,7 @@ const setPosts = {
       title: 'Заголовок поста',
       text:'Далеко-далеко за словесными горами в стране гласных, и согласных живут рыбные тексты. Дороге, снова парадигматическая возвращайся языком, дорогу строчка что сих коварных курсивных семантика, которое живет букв ручеек буквоград имеет свой буквенных над пустился. Своего рот ведущими семь залетают буквенных, дорогу своих пор рыбными взобравшись журчит. Свой однажды всеми пор выйти единственное языком большого мир, дал то алфавит предупредила щеке журчит продолжил сих путь заголовок своих использовало первую рыбного текстов.',
       tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-      author: "admin@mail.ru",
+      author: {displayName: 'admin', photo: 'https://d2npcyp2owaeo8.cloudfront.net/images/resume/5a357edc509c6-people.png'},
       date: '12.11.2020, 20:00:00',
       like: 15,
       comments: 20
@@ -96,7 +96,7 @@ const setPosts = {
       title: 'Заголовок поста',
       text:'Далеко-далеко за словесными горами в стране гласных, и согласных живут рыбные тексты. Дороге, снова парадигматическая возвращайся языком, дорогу строчка что сих коварных курсивных семантика, которое живет букв ручеек буквоград имеет свой буквенных над пустился. Своего рот ведущими семь залетают буквенных, дорогу своих пор рыбными взобравшись журчит. Свой однажды всеми пор выйти единственное языком большого мир, дал то алфавит предупредила щеке журчит продолжил сих путь заголовок своих использовало первую рыбного текстов.',
       tags: ['свежее', 'новое', 'мое', 'случайность'],
-      author: "user@mail.ru",
+      author: {displayName: 'user', photo: 'https://particulier-employeur.fr/wp-content/themes/fepem/img/general/avatar.png'},
       date: '11.11.2020, 15:30:00',
       like: 40,
       comments: 10
@@ -105,7 +105,7 @@ const setPosts = {
       title: 'Заголовок поста3',
       text:'Далеко-далеко за словесными горами в стране гласных, и согласных живут рыбные тексты. Дороге, снова парадигматическая возвращайся языком, дорогу строчка что сих коварных курсивных семантика, которое живет букв ручеек буквоград имеет свой буквенных над пустился. Своего рот ведущими семь залетают буквенных, дорогу своих пор рыбными взобравшись журчит. Свой однажды всеми пор выйти единственное языком большого мир, дал то алфавит предупредила щеке журчит продолжил сих путь заголовок своих использовало первую рыбного текстов.',
       tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-      author: "admin@mail.ru",
+      author: {displayName: 'admin', photo: 'https://d2npcyp2owaeo8.cloudfront.net/images/resume/5a357edc509c6-people.png'},
       date: '12.11.2020, 20:00:00',
       like: 15,
       comments: 20
@@ -138,8 +138,7 @@ const showAllPosts = () => {
     <div class="post-body">
         <h2 class="post-title">${title}</h2>
         <p class="post-text">${text}</p>
-        <div class="tags">
-            <a href="#" class="tag">${tags}</a>
+        <div class="tags">${tags.map(tag => `<a href="#" class="tag">#${tag}</a>`)}
         </div>
     </div>
     <div class="post-footer">
@@ -169,10 +168,10 @@ const showAllPosts = () => {
         </div>
         <div class="post-author">
             <div class="author-about">
-                <a href="#" class="author-username">${author}</a>
+                <a href="#" class="author-username">${author.displayName}</a>
                 <span class="post-time">${date}</span>
             </div>
-            <a href="#" class="author-link"><img src="img/avatar.jpg" alt="avatar" class="author-avatar"></a>
+            <a href="#" class="author-link"><img src=${author.photo || "img/avatar.jpg"} alt="avatar" class="author-avatar"></a>
         </div>
     </div>
 </section>

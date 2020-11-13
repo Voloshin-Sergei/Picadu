@@ -145,6 +145,7 @@ body {
 
 .tags {
     margin-bottom: 22px;
+    color: #BFBFBF;
 }
 
 .tag {
@@ -152,8 +153,12 @@ body {
     font-weight: normal;
     font-size: 14px;
     line-height: 22px;
-    margin-right: 10px;
+    margin-left: 10px;
     text-decoration: none;
+}
+
+.tag:first-child {
+    margin-left: 0;
 }
 
 .post-footer {
@@ -201,6 +206,7 @@ body {
     height: 34px;
     margin-left: 9px;
     border-radius: 4px;
+    object-fit: cover;
 }
 
 .author-username {
