@@ -136,7 +136,23 @@ const setUsers = {
   // authorizedUser(user) {
   //   this.user = user;
   // },
+  sendForget(email) {
+    firebase.auth().sendPasswordResetEmail(email).then(() => {
+      alert('Письмо отправлено')
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }
 };
+
+const loginForget = document.querySelector('.login-forget');
+
+loginForget.addEventListener('click', event => {
+  event.preventDefault();
+  setUsers.sendForget(emailInput.value);
+  emailInput.value = '';
+})
 
 const setPosts = {
   allPosts: [],
