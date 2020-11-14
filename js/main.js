@@ -50,19 +50,49 @@ const listUsers = [
 
 const setUsers = {
   user: null,
+  initUser(handler) {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.user = user;
+      } else {
+        this.user = null;
+      }
+      if (handler) handler();
+    });
+  },
   logIn(email, password, handler) {
-    if (!regExpValidEmail.test(email)) return alert("email не валиден");
-    const user = this.getUser(email);
-    if (user && user.password === password) {
-      this.authorizedUser(user);
-      handler();
-    } else {
-      alert("пользователь с такими данными не найден");
-    }
+    if (!regExpValidEmail.test(email)) {
+      alert("email не валиден");
+      return;
+    }  
+    
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .catch(err => {
+      const errCode = err.code;
+      const errMessage = err.message;
+      if (errCode === 'auth/wrong-password') {
+        console.log(errMessage);
+        alert('Неверный пароль');
+      } else if (errCode === 'auth/user-not-found') {
+        console.log(errMessage);
+        alert('Пользователь не найден')
+      } else {
+        alert(errMessage);
+      }
+      console.log(err);
+    });
+
+    // const user = this.getUser(email);
+    // if (user && user.password === password) {
+    //   this.authorizedUser(user);
+    //   handler();
+    // } else {
+    //   alert("пользователь с такими данными не найден");
+    // }
   },
   logOut(handler) {
-    this.user = null;
-    handler();
+    firebase.auth().signOut();
+    // handler();
   },
   signUp(email, password, handler) {
     if (!regExpValidEmail.test(email)) return alert("email не валиден");
@@ -71,21 +101,46 @@ const setUsers = {
       return;
     }
 
-    if (!this.getUser(email)) {
-      const user = { email, password, displayName: email.substring(0, email.indexOf('@'))};
-      listUsers.push(user);
-      this.authorizedUser(user);
-      handler();
-    } else {
-      alert("пользователь с таким email уже зарегистрирован");
-    }
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(data => {this.editUser(email.substring(0, email.indexOf('@')), null, handler)})
+    .catch(err => {
+      const errCode = err.code;
+      const errMessage = err.message;
+      if (errCode === 'auth/weak-password') {
+        console.log(errMessage);
+        alert('Слабый пароль')
+      } else if (errCode === 'auth/email-already-in-use') {
+        console.log(errMessage);
+        alert('Этот email уже используется')
+      } else {
+        alert(errMessage)
+      }
+      console.log(err);
+    });
+
+    // if (!this.getUser(email)) {
+    //   const user = { email, password, displayName: email.substring(0, email.indexOf('@'))};
+    //   listUsers.push(user);
+    //   this.authorizedUser(user);
+    //   handler();
+    // } else {
+    //   alert("пользователь с таким email уже зарегистрирован");
+    // }
   },
-  editUser(userName, userPhoto, handler) {
-    if (userName) {
-      this.user.displayName = userName;
-    }
-    if (userPhoto) {
-      this.user.photo = userPhoto;
+  editUser(displayName, photoURL, handler) {
+    const user = firebase.auth().currentUser;
+    
+    if (displayName) {
+      if (photoURL) {
+        user.updateProfile({
+          displayName,
+          photoURL
+        }).then(handler)
+      } else {
+        user.updateProfile({
+        displayName
+        }).then(handler)
+      }
     }
     handler();
   },
@@ -157,7 +212,7 @@ const toggleAuthDom = () => {
     loginElem.style.display = "none";
     userElem.style.display = "";
     userNameElem.textContent = user.displayName;
-    userAvatarElem.src = user.photo ? user.photo : userAvatarElem.src;
+    userAvatarElem.src = user.photoURL ? user.photoURL : userAvatarElem.src;
     buttonNewPost.classList.add('visible');
   } else {
     loginElem.style.display = "";
@@ -243,7 +298,7 @@ const init = () => {
   
   exitElem.addEventListener('click', event => {
     event.preventDefault();
-    setUsers.logOut(toggleAuthDom);
+    setUsers.logOut();
   });
   
   editElem.addEventListener('click', event => {
@@ -286,8 +341,10 @@ const init = () => {
     addPost.reset();
   });
 
+  setUsers.initUser(toggleAuthDom);
+
   showAllPosts();
-  toggleAuthDom();
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
