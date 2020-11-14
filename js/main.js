@@ -33,21 +33,6 @@ const postsWrapper = document.querySelector('.posts');
 const buttonNewPost = document.querySelector('.button-new-post');
 const addPostElem = document.querySelector('.add-post');
 
-const listUsers = [
-  {
-    id: "01",
-    email: "admin@mail.ru",
-    password: "admin",
-    displayName: "Admin",
-  },
-  {
-    id: "02",
-    email: "user@mail.ru",
-    password: "user",
-    displayName: "User",
-  },
-];
-
 const setUsers = {
   user: null,
   initUser(handler) {
@@ -144,62 +129,40 @@ const setUsers = {
     }
     handler();
   },
-  getUser(email) {
-    return listUsers.find((item) => item.email === email);
-  },
-  authorizedUser(user) {
-    this.user = user;
-  },
+  // getUser(email) {
+  //   return listUsers.find((item) => item.email === email);
+  // },
+  // authorizedUser(user) {
+  //   this.user = user;
+  // },
 };
 
 const setPosts = {
-  allPosts: [
-    {
-      title: 'Заголовок поста',
-      text:'Далеко-далеко за словесными горами в стране гласных, и согласных живут рыбные тексты. Дороге, снова парадигматическая возвращайся языком, дорогу строчка что сих коварных курсивных семантика, которое живет букв ручеек буквоград имеет свой буквенных над пустился. Своего рот ведущими семь залетают буквенных, дорогу своих пор рыбными взобравшись журчит. Свой однажды всеми пор выйти единственное языком большого мир, дал то алфавит предупредила щеке журчит продолжил сих путь заголовок своих использовало первую рыбного текстов.',
-      tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-      author: {displayName: 'admin', photo: 'https://d2npcyp2owaeo8.cloudfront.net/images/resume/5a357edc509c6-people.png'},
-      date: '12.11.2020, 20:00:00',
-      like: 15,
-      comments: 20
-    },
-    {
-      title: 'Заголовок поста',
-      text:'Далеко-далеко за словесными горами в стране гласных, и согласных живут рыбные тексты. Дороге, снова парадигматическая возвращайся языком, дорогу строчка что сих коварных курсивных семантика, которое живет букв ручеек буквоград имеет свой буквенных над пустился. Своего рот ведущими семь залетают буквенных, дорогу своих пор рыбными взобравшись журчит. Свой однажды всеми пор выйти единственное языком большого мир, дал то алфавит предупредила щеке журчит продолжил сих путь заголовок своих использовало первую рыбного текстов.',
-      tags: ['свежее', 'новое', 'мое', 'случайность'],
-      author: {displayName: 'user', photo: 'https://particulier-employeur.fr/wp-content/themes/fepem/img/general/avatar.png'},
-      date: '11.11.2020, 15:30:00',
-      like: 40,
-      comments: 10
-    },
-    {
-      title: 'Заголовок поста3',
-      text:'Далеко-далеко за словесными горами в стране гласных, и согласных живут рыбные тексты. Дороге, снова парадигматическая возвращайся языком, дорогу строчка что сих коварных курсивных семантика, которое живет букв ручеек буквоград имеет свой буквенных над пустился. Своего рот ведущими семь залетают буквенных, дорогу своих пор рыбными взобравшись журчит. Свой однажды всеми пор выйти единственное языком большого мир, дал то алфавит предупредила щеке журчит продолжил сих путь заголовок своих использовало первую рыбного текстов.',
-      tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-      author: {displayName: 'admin', photo: 'https://d2npcyp2owaeo8.cloudfront.net/images/resume/5a357edc509c6-people.png'},
-      date: '12.11.2020, 20:00:00',
-      like: 15,
-      comments: 20
-    },
-  ],
+  allPosts: [],
   addPost(title, text, tags, handler) {
+    const user = firebase.auth().currentUser;
 
     this.allPosts.unshift({
+      id: `postID${(+new Date()).toString(16)}-${user.uid}`,
       title,
       text,
       tags: tags.split(',').map(item => item.trim()),
       author: {
         displayName: setUsers.user.displayName,
-        photo: setUsers.user.photo,
+        photo: setUsers.user.photoURL,
       },
       date: new Date().toLocaleString(),
       like: 0,
       comments: 0,
     })
 
-    if (handler) { // TODO add to all fuction with handler
-      handler(); 
-    }
+    firebase.database().ref('post').set(this.allPosts).then(() => this.getPosts(handler))
+  },
+  getPosts(handler) {
+    firebase.database().ref('post').on('value', snapshot => {
+      this.allPosts = snapshot.val() || [];
+      handler();
+    })
   }
   
 };
@@ -342,8 +305,7 @@ const init = () => {
   });
 
   setUsers.initUser(toggleAuthDom);
-
-  showAllPosts();
+  setPosts.getPosts(showAllPosts);
 
 }
 
