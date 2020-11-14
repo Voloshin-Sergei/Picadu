@@ -32,6 +32,7 @@ const userAvatarElem = document.querySelector('.user-avatar');
 const postsWrapper = document.querySelector('.posts');
 const buttonNewPost = document.querySelector('.button-new-post');
 const addPostElem = document.querySelector('.add-post');
+const default_photo = userAvatarElem.src;
 
 const setUsers = {
   user: null,
@@ -175,7 +176,7 @@ const toggleAuthDom = () => {
     loginElem.style.display = "none";
     userElem.style.display = "";
     userNameElem.textContent = user.displayName;
-    userAvatarElem.src = user.photoURL ? user.photoURL : userAvatarElem.src;
+    userAvatarElem.src = user.photoURL ? user.photoURL : default_photo;
     buttonNewPost.classList.add('visible');
   } else {
     loginElem.style.display = "";
