@@ -68,13 +68,6 @@ const setUsers = {
       console.log(err);
     });
 
-    // const user = this.getUser(email);
-    // if (user && user.password === password) {
-    //   this.authorizedUser(user);
-    //   handler();
-    // } else {
-    //   alert("пользователь с такими данными не найден");
-    // }
   },
   logOut(handler) {
     firebase.auth().signOut();
@@ -104,14 +97,6 @@ const setUsers = {
       console.log(err);
     });
 
-    // if (!this.getUser(email)) {
-    //   const user = { email, password, displayName: email.substring(0, email.indexOf('@'))};
-    //   listUsers.push(user);
-    //   this.authorizedUser(user);
-    //   handler();
-    // } else {
-    //   alert("пользователь с таким email уже зарегистрирован");
-    // }
   },
   editUser(displayName, photoURL, handler) {
     const user = firebase.auth().currentUser;
@@ -130,12 +115,7 @@ const setUsers = {
     }
     handler();
   },
-  // getUser(email) {
-  //   return listUsers.find((item) => item.email === email);
-  // },
-  // authorizedUser(user) {
-  //   this.user = user;
-  // },
+
   sendForget(email) {
     firebase.auth().sendPasswordResetEmail(email).then(() => {
       alert('Письмо отправлено')
